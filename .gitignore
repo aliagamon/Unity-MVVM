@@ -36,5 +36,5 @@ sysinfo.txt
 *.unitypackage
 
 # Vim
-*.swap
+*.swp
 *.vim
