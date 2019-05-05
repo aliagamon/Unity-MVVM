@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -278,7 +278,7 @@ MonoBehaviour:
   SrcPropertyName: Color
   DstPropertyName: color
   _dstView: {fileID: 174998486}
-  _converter: {fileID: 0}
+  Converters: []
 --- !u!114 &174998485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -765,7 +765,7 @@ MonoBehaviour:
   SrcPropertyName: Text
   DstPropertyName: text
   _dstView: {fileID: 458916786}
-  _converter: {fileID: 0}
+  Converters: []
   _dstChangedEventName: onValueChanged
   DstChangedEvents:
   - onEndEdit
@@ -1187,7 +1187,7 @@ MonoBehaviour:
   SrcPropertyName: Color
   DstPropertyName: color
   _dstView: {fileID: 691889571}
-  _converter: {fileID: 0}
+  Converters: []
 --- !u!114 &691889569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1210,6 +1210,7 @@ MonoBehaviour:
   - SetText
   ViewModels:
   - UnityMVVM.Examples.OtherViewModel
+  - UnityMVVM.Examples.ReactiveViewModel
   - UnityMVVM.Examples.TestViewModel
   _srcView: {fileID: 691889570}
   _dstViewModel: {fileID: 1679655145}
@@ -1481,7 +1482,8 @@ MonoBehaviour:
   SrcPropertyName: Color
   DstPropertyName: text
   _dstView: {fileID: 1270270532}
-  _converter: {fileID: 1270270530}
+  Converters:
+  - {fileID: 1270270530}
 --- !u!114 &1270270532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1538,8 +1540,9 @@ GameObject:
   - component: {fileID: 1383601612}
   - component: {fileID: 1383601610}
   - component: {fileID: 1383601609}
+  - component: {fileID: 1383601611}
   m_Layer: 5
-  m_Name: Bool To Color Converter
+  m_Name: Bool To Color To String Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1597,6 +1600,8 @@ MonoBehaviour:
   - IntProp
   - BoolProp
   - TestCollection
+  - SelectedModel
+  - Collection2
   - useGUILayout
   - runInEditMode
   - enabled
@@ -1607,22 +1612,24 @@ MonoBehaviour:
   - name
   - hideFlags
   DstProps:
-  - sprite
-  - overrideSprite
-  - type
-  - preserveAspect
-  - fillCenter
-  - fillMethod
-  - fillAmount
-  - fillClockwise
-  - fillOrigin
-  - alphaHitTestMinimumThreshold
-  - useSpriteMesh
-  - material
+  - font
+  - text
+  - supportRichText
+  - resizeTextForBestFit
+  - resizeTextMinSize
+  - resizeTextMaxSize
+  - alignment
+  - alignByGeometry
+  - fontSize
+  - horizontalOverflow
+  - verticalOverflow
+  - lineSpacing
+  - fontStyle
   - onCullStateChanged
   - maskable
   - color
   - raycastTarget
+  - material
   - useGUILayout
   - runInEditMode
   - enabled
@@ -1630,9 +1637,23 @@ MonoBehaviour:
   - name
   - hideFlags
   SrcPropertyName: BoolProp
-  DstPropertyName: color
-  _dstView: {fileID: 1383601613}
-  _converter: {fileID: 1383601609}
+  DstPropertyName: text
+  _dstView: {fileID: 538402078}
+  Converters:
+  - {fileID: 1383601609}
+  - {fileID: 1383601611}
+--- !u!114 &1383601611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383601607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d53fbd57145c94f824a6523664be8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1383601612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1904,7 +1925,8 @@ MonoBehaviour:
   SrcPropertyName: State
   DstPropertyName: ElementVisibility
   _dstView: {fileID: 1630440238}
-  _converter: {fileID: 1630440233}
+  Converters:
+  - {fileID: 1630440233}
 --- !u!114 &1630440238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1918,6 +1940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _visibility: 0
+  _alpha: 0
   _fadeTime: 1
 --- !u!1 &1632300674
 GameObject:
@@ -2043,6 +2066,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _intField: 0
   _boolField: 0
+  _selectedModel:
+    message: 
+    color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1679655142
 GameObject:
   m_ObjectHideFlags: 0
@@ -2089,6 +2115,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _intField: 0
   _boolField: 0
+  _selectedModel:
+    message: 
+    color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1679655145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2183,6 +2212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae0762e55afbc840a63eb1cbaf87e69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _visibility: 0
+  _alpha: 0
+  _fadeTime: 1
   _listItemPrefab: {fileID: 1576776248439620, guid: 12084e8be413c694a97a0483d88fe9ac,
     type: 3}
   InstantiatedItems: []
@@ -2203,7 +2235,9 @@ MonoBehaviour:
   ViewModelName: UnityMVVM.Examples.OtherViewModel
   SrcCollections:
   - TestCollection
+  - Collection2
   SrcCollectionName: TestCollection
+  SelectedItemPropName: 
 --- !u!114 &1755598735
 MonoBehaviour:
   m_ObjectHideFlags: 0

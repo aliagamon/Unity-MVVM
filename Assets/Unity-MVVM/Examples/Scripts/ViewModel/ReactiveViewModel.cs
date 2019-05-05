@@ -11,6 +11,8 @@ namespace UnityMVVM.Examples
         public ReactiveProperty<int> IntProp = new ReactiveProperty<int>(10);
         public ReactiveCommand<int> TestCommand;
 
+        public int Result;
+
         public void Awake()
         {
             TestCommand = IntProp.Select(x => x > 0).ToReactiveCommand<int>();
@@ -19,6 +21,11 @@ namespace UnityMVVM.Examples
                 Debug.unityLogger.Log($"val = {val} IntProp.Value = {IntProp.Value}");
                 IntProp.Value -= 1;
             });
+        }
+
+        public void Update()
+        {
+            Debug.Log(Result);
         }
     }
 }

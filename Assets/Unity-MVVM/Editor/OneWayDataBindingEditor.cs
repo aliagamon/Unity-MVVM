@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEditor;
 using UnityMVVM.Binding;
+using Rotorz.Games.Collections;
 
 namespace UnityMVVM.Editor
 {
@@ -21,6 +22,8 @@ namespace UnityMVVM.Editor
         List<string> _srcPropNames;
         List<string> _dstPropNames;
 
+        private SerializedProperty _convertersProp;
+
         protected override void CollectSerializedProperties()
         {
             base.CollectSerializedProperties();
@@ -33,13 +36,20 @@ namespace UnityMVVM.Editor
             _srcPropNames = _srcProps.GetStringArray();
             _dstPropNames = _dstProps.GetStringArray();
 
+            _convertersProp = serializedObject.FindProperty("Converters");
+
         }
 
         protected override void DrawChangeableElements()
         {
+            ReorderableListGUI.Title("Converters");
+            ReorderableListGUI.ListField(_convertersProp,
+                () => EditorGUILayout.LabelField("There is no converter in use.", EditorStyles.miniLabel));
+
             base.DrawChangeableElements();
 
             var myClass = target as OneWayDataBinding;
+
 
             EditorGUILayout.LabelField("Source Property");
             _srcIndex = EditorGUILayout.Popup(_srcIndex, _srcPropNames.ToArray());

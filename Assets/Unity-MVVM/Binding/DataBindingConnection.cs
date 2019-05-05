@@ -19,7 +19,7 @@ namespace UnityMVVM.Binding
 
         readonly BindTarget _src;
         readonly BindTarget _dst;
-        IValueConverter _converter;
+        private readonly IValueConverter[] _converters;
         GameObject _gameObject;
 
         public bool IsBound;
@@ -27,12 +27,13 @@ namespace UnityMVVM.Binding
         public DataBindingConnection()
         { }
 
-        public DataBindingConnection(GameObject owner, BindTarget src, BindTarget dst, IValueConverter converter = null)
+        // public DataBindingConnection(GameObject owner, BindTarget src, BindTarget dst, IValueConverter converter = null)
+        public DataBindingConnection(GameObject owner, BindTarget src, BindTarget dst, IValueConverter[] converters = null)
         {
             _gameObject = owner;
             _src = src;
             _dst = dst;
-            _converter = converter;
+            _converters = converters;
 
             PropertyChangedAction = OnSrcUpdated;
 
@@ -46,8 +47,10 @@ namespace UnityMVVM.Binding
 
         public void DstUpdated()
         {
-            if (_converter != null)
-                _src.SetValue(_converter.ConvertBack(_dst.GetValue(), _src.property.PropertyType, null));
+            // if (_converter != null)
+                // _src.SetValue(_converter.ConvertBack(_dst.GetValue(), _src.property.PropertyType, null));
+            if (_converters != null && _converters.Length > 0)
+                _src.SetValue(_converters.ChainConvertBack(_dst.GetValue(), _src.property.PropertyType, null));
             else
                 _src.SetValue(Convert.ChangeType(_dst.GetValue(), _src.property.PropertyType));
         }
@@ -87,8 +90,10 @@ namespace UnityMVVM.Binding
         {
             try
             {
-                if (_converter != null)
-                    _dst.SetValue(_converter.Convert(_src.GetValue(), _dst.property.PropertyType, null));
+                // if (_converter != null)
+                    // _dst.SetValue(_converter.Convert(_src.GetValue(), _dst.property.PropertyType, null));
+                if (_converters != null && _converters.Length > 0)
+                    _dst.SetValue(_converters.ChainConvert(_src.GetValue(), _dst.property.PropertyType, null));
                 else if (_src.GetValue() is IConvertible)
                     _dst.SetValue(Convert.ChangeType(_src.GetValue(), _dst.property.PropertyType));
                 else

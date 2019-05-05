@@ -30,12 +30,16 @@ namespace UnityMVVM.Binding
         [SerializeField]
         public UnityEngine.Component _dstView;
 
-        [SerializeField]
-        protected ValueConverterBase _converter;
+        // [SerializeField]
+        // protected ValueConverterBase _converter;
+
+        [SerializeField][HideInInspector]
+        protected ValueConverterBase[] Converters;
 
         [HideInInspector]
         protected string PropertyPath = null;
 
+        private IValueConverter[] IConverters => Array.ConvertAll(Converters, x => (IValueConverter) x);
 
         bool _isStartup = true;
 
@@ -51,7 +55,7 @@ namespace UnityMVVM.Binding
             }
             if (_connection == null)
             {
-                _connection = new DataBindingConnection(gameObject, new BindTarget(_viewModel, SrcPropertyName, path: PropertyPath), new BindTarget(_dstView, DstPropertyName), _converter);
+                _connection = new DataBindingConnection(gameObject, new BindTarget(_viewModel, SrcPropertyName, path: PropertyPath), new BindTarget(_dstView, DstPropertyName), IConverters);
             }
 
             _connection.Bind();
