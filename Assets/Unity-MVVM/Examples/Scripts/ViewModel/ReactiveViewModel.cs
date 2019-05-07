@@ -2,6 +2,7 @@ using System;
 using UniRx;
 using UnityMVVM.ViewModel;
 using UnityEngine;
+using System.Collections;
 using BoolReactiveProperty = UnityMVVM.Reactive.BoolReactiveProperty;
 using ColorReactiveProperty = UnityMVVM.Reactive.ColorReactiveProperty;
 using Random = UnityEngine.Random;
@@ -11,6 +12,7 @@ namespace UnityMVVM.Examples
 {
     public class ReactiveViewModel : ViewModelBase
     {
+        public Reactive.ReactiveProperty<ApplicationState> State = new Reactive.ReactiveProperty<ApplicationState>();
         public Reactive.ReactiveProperty<int> IntProp = new Reactive.ReactiveProperty<int>(10);
         public StringReactiveProperty Text = new StringReactiveProperty();
         public BoolReactiveProperty BoolProp = new BoolReactiveProperty();
@@ -34,6 +36,7 @@ namespace UnityMVVM.Examples
         public void Start()
         {
             Text.Value = DateTime.Now.ToShortTimeString();
+            StartCoroutine(StateChangeRoutine());
         }
 
         public void Update()
@@ -41,6 +44,15 @@ namespace UnityMVVM.Examples
             if(DateTime.Now.Second % 5 == 0)
                 Text.Value = DateTime.Now.ToShortTimeString();
             BoolProp.Value = (DateTime.Now.Second % 2 == 0);
+        }
+
+        private IEnumerator StateChangeRoutine()
+        {
+            while (true)
+            {
+                State.Value = (ApplicationState)((int)(State.Value + 1) % 3);
+                yield return new WaitForSeconds(3f);
+            }
         }
     }
 }

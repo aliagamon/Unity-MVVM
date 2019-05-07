@@ -236,6 +236,8 @@ MonoBehaviour:
   _viewModel: {fileID: 0}
   ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
   - PropertyName: IntProp
     PropertyType: Int32
   - PropertyName: Text
@@ -726,6 +728,8 @@ MonoBehaviour:
   _viewModel: {fileID: 0}
   ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
   - PropertyName: IntProp
     PropertyType: Int32
   - PropertyName: Text
@@ -1196,6 +1200,8 @@ MonoBehaviour:
   _viewModel: {fileID: 0}
   ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
   - PropertyName: IntProp
     PropertyType: Int32
   - PropertyName: Text
@@ -1513,6 +1519,8 @@ MonoBehaviour:
   _viewModel: {fileID: 0}
   ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
   - PropertyName: IntProp
     PropertyType: Int32
   - PropertyName: Text
@@ -1693,6 +1701,8 @@ MonoBehaviour:
   _viewModel: {fileID: 1669541576}
   ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
   - PropertyName: IntProp
     PropertyType: Int32
   - PropertyName: Text
@@ -1866,6 +1876,8 @@ MonoBehaviour:
   _viewModel: {fileID: 0}
   ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
   - PropertyName: IntProp
     PropertyType: Int32
   - PropertyName: Text
@@ -2084,7 +2096,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1630440230}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e31f2e59e31301c4bba62b78cf483dd6, type: 3}
   m_Name: 
@@ -2092,6 +2104,8 @@ MonoBehaviour:
   _viewModel: {fileID: 0}
   ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
   - PropertyName: IntProp
     PropertyType: Int32
   - PropertyName: Text
@@ -2118,8 +2132,8 @@ MonoBehaviour:
   - PropertyName: hideFlags
     PropertyType: HideFlags
   SrcPropertyName:
-    PropertyName: IntProp
-    PropertyType: ReactiveProperty`1
+    PropertyName: State
+    PropertyType: ApplicationState
   DstPropertyName:
     PropertyName: ElementVisibility
     PropertyType: Visibility
