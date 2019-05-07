@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityMVVM.Binding;
 using Rotorz.Games.Collections;
@@ -33,8 +34,8 @@ namespace UnityMVVM.Editor
             _srcProps = serializedObject.FindProperty("SrcProps");
             _dstProps = serializedObject.FindProperty("DstProps");
 
-            _srcPropNames = _srcProps.GetStringArray();
-            _dstPropNames = _dstProps.GetStringArray();
+            _srcPropNames = _srcProps.GetPropertiesArray();
+            _dstPropNames = _dstProps.GetPropertiesArray();
 
             _convertersProp = serializedObject.FindProperty("Converters");
 
@@ -61,32 +62,39 @@ namespace UnityMVVM.Editor
         protected override void UpdateSerializedProperties()
         {
             base.UpdateSerializedProperties();
-            var myClass = target as OneWayDataBinding;
+            if (!(target is OneWayDataBinding myClass)) return;
 
             myClass.SrcPropertyName = _srcIndex > -1 ?
-                   _srcPropNames[_srcIndex] : null;
+                   myClass.SrcProps[_srcIndex] : null;
+
+            //myClass.DstPropertyName = _dstIndex > -1 ?
+            //     _dstPropNames[_dstIndex] : null;
 
             myClass.DstPropertyName = _dstIndex > -1 ?
-                 _dstPropNames[_dstIndex] : null;
+                myClass.DstProps[_dstIndex] : null;
         }
 
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            var myClass = target as OneWayDataBinding;
+            if (!(target is OneWayDataBinding myClass)) return;
 
-            _srcIndex = _srcPropNames.IndexOf(_srcNameProp.stringValue);
+            _srcIndex = myClass.SrcPropertyName is null
+                ? -1
+                : myClass.SrcProps.FindIndex(p => p.PropertyName == myClass.SrcPropertyName.PropertyName);
             if (_srcIndex < 0 && _srcPropNames.Count > 0)
             {
                 _srcIndex = 0;
-                myClass.SrcPropertyName = _srcPropNames.FirstOrDefault();
+                myClass.SrcPropertyName = myClass.SrcProps.FirstOrDefault();
             }
 
-            _dstIndex = _dstPropNames.IndexOf(_dstNameProp.stringValue);
+            _dstIndex = myClass.DstPropertyName is null
+                ? -1
+                : myClass.DstProps.FindIndex(p => p.PropertyName == myClass.DstPropertyName.PropertyName);
             if (_dstIndex < 0 && _dstPropNames.Count > 0)
             {
                 _dstIndex = 0;
-                myClass.DstPropertyName = _dstPropNames.FirstOrDefault();
+                myClass.DstPropertyName = myClass.DstProps.FirstOrDefault();
             }
         }
     }
@@ -106,4 +114,19 @@ public static class SerializedPropertyExt
 
         return list;
     }
+
+    public static List<string> GetPropertiesArray(this SerializedProperty prop)
+    {
+        List<string> list = new List<string>(prop.arraySize);
+
+        for (int i = 0; i < prop.arraySize; i++)
+        {
+            var arrayElementAtIndex = prop.GetArrayElementAtIndex(i);
+            list.Add(
+                $"{arrayElementAtIndex.FindPropertyRelative("PropertyName").stringValue}({arrayElementAtIndex.FindPropertyRelative("PropertyType").stringValue})");
+        }
+
+        return list;
+    }
+
 }

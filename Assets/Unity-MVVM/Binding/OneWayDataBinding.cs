@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UniRx;
 using UnityEngine;
 using UnityMVVM.Binding.Converters;
 using UnityMVVM.Util;
+using Util;
 
 namespace UnityMVVM.Binding
 {
@@ -16,16 +18,20 @@ namespace UnityMVVM.Binding
         protected DataBindingConnection _connection;
 
         [HideInInspector]
-        public List<string> SrcProps = new List<string>();
+        public List<BindablePropertyInfo> SrcProps = new List<BindablePropertyInfo>();
+
         [HideInInspector]
-        public List<string> DstProps = new List<string>();
+        public List<BindablePropertyInfo> DstProps = new List<BindablePropertyInfo>();
 
 
         [HideInInspector]
-        public string SrcPropertyName = null;
+        public BindablePropertyInfo SrcPropertyName = null;
+
+        //[HideInInspector]
+        //public string DstPropertyName = null;
 
         [HideInInspector]
-        public string DstPropertyName = null;
+        public BindablePropertyInfo DstPropertyName = null;
 
         [SerializeField]
         public UnityEngine.Component _dstView;
@@ -55,7 +61,9 @@ namespace UnityMVVM.Binding
             }
             if (_connection == null)
             {
-                _connection = new DataBindingConnection(gameObject, new BindTarget(_viewModel, SrcPropertyName, path: PropertyPath), new BindTarget(_dstView, DstPropertyName), IConverters);
+                _connection = new DataBindingConnection(
+                    gameObject, SrcPropertyName.ToBindTarget(_viewModel, true,
+                        PropertyPath), DstPropertyName.ToBindTarget(_dstView), IConverters);
             }
 
             _connection.Bind();
@@ -76,18 +84,21 @@ namespace UnityMVVM.Binding
             if (_dstView != null)
             {
                 var props = _dstView.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                DstProps = props.Where(prop => prop.GetSetMethod(false) != null
-                       && prop.GetSetMethod(false) != null
-                       && !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any()
-                    ).Select(e => e.Name).ToList(); ;
+                DstProps =  props.Where(prop => prop.GetSetMethod(false) != null
+                                                && prop.GetSetMethod(false) != null
+                                                && !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any()
+                ).Select(e => new BindablePropertyInfo {PropertyName = e.Name, PropertyType = e.PropertyType.Name}).ToList();
+
             }
 
             if (!string.IsNullOrEmpty(ViewModelName))
             {
-                var props = ViewModelProvider.GetViewModelProperties(ViewModelName);
-                SrcProps = props.Where(prop => prop.GetGetMethod(false) != null
-                       && !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any()
-                    ).Select(e => e.Name).ToList();
+                var props = ViewModelProvider.GetViewModelFields(ViewModelName);
+                SrcProps = props.Where(prop =>
+                        prop.FieldType.IsAssignableToGenericType(typeof(Reactive.ReactiveProperty<>))
+                        && !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true)
+                            .Any())
+                    .Select(e => new BindablePropertyInfo(e.Name, e.FieldType.IsGenericType ? e.FieldType.GetGenericArguments()[0].Name : e.FieldType.BaseType.GetGenericArguments()[0].Name)).ToList();
             }
         }
 

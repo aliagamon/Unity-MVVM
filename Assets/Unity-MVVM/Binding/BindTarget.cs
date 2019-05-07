@@ -16,18 +16,27 @@ namespace UnityMVVM.Binding
 
         public PropertyInfo property;
 
-        public BindTarget(object propOwner, string propName, string path = null, UnityEvent dstChangedEvent = null)
+        public readonly bool IsReactive;
+
+        public BindTarget(object propOwner, string propName, string path = null, UnityEvent dstChangedEvent = null, bool isReactive = false)
         {
-            propertyOwner = propOwner;
+            propertyOwner = isReactive ? propOwner.GetType().GetField(propName).GetValue(propOwner) : propOwner;
             propertyName = propName;
             propertyPath = path;
+            IsReactive = isReactive;
 
             if (propertyOwner == null)
             {
                 Debug.LogErrorFormat("Could not find ViewModel for Property {0}", propName);
+                return;
             }
 
-            property = propertyOwner.GetType().GetProperty(propertyName);//.ResolvePath(path);
+            if (isReactive)
+            {
+                property = propertyOwner.GetType().GetProperty("Value");
+            }
+            else
+                property = propertyOwner.GetType().GetProperty(propertyName);//.ResolvePath(path);
 
             if (dstChangedEvent != null)
                 dstChangedEvent.AddListener(new UnityAction(() =>

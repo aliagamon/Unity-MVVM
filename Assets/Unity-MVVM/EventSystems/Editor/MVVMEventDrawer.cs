@@ -522,7 +522,12 @@ namespace UnityMVVM.EventSystems.Editor
                 /* .Select(c => c.FieldType.GetMethod("Execute")) */.ToArray();
             foreach (var com in commands)
             {
-                var c = com.FieldType.GetMethod("Execute");
+                MethodInfo c;
+                if (com.FieldType == typeof(ReactiveCommand))
+                    c = com.FieldType.GetMethod("Execute", BindingFlags.Public | BindingFlags.Instance, null,
+                        Type.EmptyTypes, null);
+                else
+                    c = com.FieldType.GetMethod("Execute");
                 var parameters = c.GetParameters();
                if (parameters.Length == t.Length && c.GetCustomAttributes(typeof(ObsoleteAttribute), true).Length <= 0 && c.ReturnType == typeof(bool))
                {

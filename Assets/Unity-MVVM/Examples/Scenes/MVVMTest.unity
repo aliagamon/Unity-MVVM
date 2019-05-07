@@ -234,49 +234,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewModel: {fileID: 0}
-  ViewModelName: UnityMVVM.Examples.TestViewModel
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
-  - State
-  - Text
-  - Color
-  - Color2
-  - Color3
-  - Color4
-  - Color5
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - isActiveAndEnabled
-  - transform
-  - gameObject
-  - tag
-  - name
-  - hideFlags
+  - PropertyName: IntProp
+    PropertyType: Int32
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
   DstProps:
-  - sprite
-  - overrideSprite
-  - type
-  - preserveAspect
-  - fillCenter
-  - fillMethod
-  - fillAmount
-  - fillClockwise
-  - fillOrigin
-  - alphaHitTestMinimumThreshold
-  - useSpriteMesh
-  - material
-  - onCullStateChanged
-  - maskable
-  - color
-  - raycastTarget
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - tag
-  - name
-  - hideFlags
-  SrcPropertyName: Color
-  DstPropertyName: color
+  - PropertyName: sprite
+    PropertyType: Sprite
+  - PropertyName: overrideSprite
+    PropertyType: Sprite
+  - PropertyName: type
+    PropertyType: Type
+  - PropertyName: preserveAspect
+    PropertyType: Boolean
+  - PropertyName: fillCenter
+    PropertyType: Boolean
+  - PropertyName: fillMethod
+    PropertyType: FillMethod
+  - PropertyName: fillAmount
+    PropertyType: Single
+  - PropertyName: fillClockwise
+    PropertyType: Boolean
+  - PropertyName: fillOrigin
+    PropertyType: Int32
+  - PropertyName: alphaHitTestMinimumThreshold
+    PropertyType: Single
+  - PropertyName: useSpriteMesh
+    PropertyType: Boolean
+  - PropertyName: material
+    PropertyType: Material
+  - PropertyName: onCullStateChanged
+    PropertyType: CullStateChangedEvent
+  - PropertyName: maskable
+    PropertyType: Boolean
+  - PropertyName: color
+    PropertyType: Color
+  - PropertyName: raycastTarget
+    PropertyType: Boolean
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: Color
+    PropertyType: ReactiveProperty`1
+  DstPropertyName:
+    PropertyName: color
+    PropertyType: Color
   _dstView: {fileID: 174998486}
   Converters: []
 --- !u!114 &174998485
@@ -706,64 +724,97 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewModel: {fileID: 0}
-  ViewModelName: UnityMVVM.Examples.TestViewModel
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
-  - State
-  - Text
-  - Color
-  - Color2
-  - Color3
-  - Color4
-  - Color5
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - isActiveAndEnabled
-  - transform
-  - gameObject
-  - tag
-  - name
-  - hideFlags
+  - PropertyName: IntProp
+    PropertyType: Int32
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
   DstProps:
-  - shouldHideMobileInput
-  - text
-  - caretBlinkRate
-  - caretWidth
-  - textComponent
-  - placeholder
-  - caretColor
-  - customCaretColor
-  - selectionColor
-  - onEndEdit
-  - onValueChanged
-  - onValidateInput
-  - characterLimit
-  - contentType
-  - lineType
-  - inputType
-  - keyboardType
-  - characterValidation
-  - readOnly
-  - asteriskChar
-  - caretPosition
-  - selectionAnchorPosition
-  - selectionFocusPosition
-  - navigation
-  - transition
-  - colors
-  - spriteState
-  - animationTriggers
-  - targetGraphic
-  - interactable
-  - image
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - tag
-  - name
-  - hideFlags
-  SrcPropertyName: Text
-  DstPropertyName: text
+  - PropertyName: shouldHideMobileInput
+    PropertyType: Boolean
+  - PropertyName: text
+    PropertyType: String
+  - PropertyName: caretBlinkRate
+    PropertyType: Single
+  - PropertyName: caretWidth
+    PropertyType: Int32
+  - PropertyName: textComponent
+    PropertyType: Text
+  - PropertyName: placeholder
+    PropertyType: Graphic
+  - PropertyName: caretColor
+    PropertyType: Color
+  - PropertyName: customCaretColor
+    PropertyType: Boolean
+  - PropertyName: selectionColor
+    PropertyType: Color
+  - PropertyName: onEndEdit
+    PropertyType: SubmitEvent
+  - PropertyName: onValueChanged
+    PropertyType: OnChangeEvent
+  - PropertyName: onValidateInput
+    PropertyType: OnValidateInput
+  - PropertyName: characterLimit
+    PropertyType: Int32
+  - PropertyName: contentType
+    PropertyType: ContentType
+  - PropertyName: lineType
+    PropertyType: LineType
+  - PropertyName: inputType
+    PropertyType: InputType
+  - PropertyName: keyboardType
+    PropertyType: TouchScreenKeyboardType
+  - PropertyName: characterValidation
+    PropertyType: CharacterValidation
+  - PropertyName: readOnly
+    PropertyType: Boolean
+  - PropertyName: asteriskChar
+    PropertyType: Char
+  - PropertyName: caretPosition
+    PropertyType: Int32
+  - PropertyName: selectionAnchorPosition
+    PropertyType: Int32
+  - PropertyName: selectionFocusPosition
+    PropertyType: Int32
+  - PropertyName: navigation
+    PropertyType: Navigation
+  - PropertyName: transition
+    PropertyType: Transition
+  - PropertyName: colors
+    PropertyType: ColorBlock
+  - PropertyName: spriteState
+    PropertyType: SpriteState
+  - PropertyName: animationTriggers
+    PropertyType: AnimationTriggers
+  - PropertyName: targetGraphic
+    PropertyType: Graphic
+  - PropertyName: interactable
+    PropertyType: Boolean
+  - PropertyName: image
+    PropertyType: Image
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: Text
+    PropertyType: String
+  DstPropertyName:
+    PropertyName: text
+    PropertyType: String
   _dstView: {fileID: 458916786}
   Converters: []
   _dstChangedEventName: onValueChanged
@@ -1143,49 +1194,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewModel: {fileID: 0}
-  ViewModelName: UnityMVVM.Examples.TestViewModel
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
-  - State
-  - Text
-  - Color
-  - Color2
-  - Color3
-  - Color4
-  - Color5
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - isActiveAndEnabled
-  - transform
-  - gameObject
-  - tag
-  - name
-  - hideFlags
+  - PropertyName: IntProp
+    PropertyType: Int32
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
   DstProps:
-  - sprite
-  - overrideSprite
-  - type
-  - preserveAspect
-  - fillCenter
-  - fillMethod
-  - fillAmount
-  - fillClockwise
-  - fillOrigin
-  - alphaHitTestMinimumThreshold
-  - useSpriteMesh
-  - material
-  - onCullStateChanged
-  - maskable
-  - color
-  - raycastTarget
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - tag
-  - name
-  - hideFlags
-  SrcPropertyName: Color
-  DstPropertyName: color
+  - PropertyName: sprite
+    PropertyType: Sprite
+  - PropertyName: overrideSprite
+    PropertyType: Sprite
+  - PropertyName: type
+    PropertyType: Type
+  - PropertyName: preserveAspect
+    PropertyType: Boolean
+  - PropertyName: fillCenter
+    PropertyType: Boolean
+  - PropertyName: fillMethod
+    PropertyType: FillMethod
+  - PropertyName: fillAmount
+    PropertyType: Single
+  - PropertyName: fillClockwise
+    PropertyType: Boolean
+  - PropertyName: fillOrigin
+    PropertyType: Int32
+  - PropertyName: alphaHitTestMinimumThreshold
+    PropertyType: Single
+  - PropertyName: useSpriteMesh
+    PropertyType: Boolean
+  - PropertyName: material
+    PropertyType: Material
+  - PropertyName: onCullStateChanged
+    PropertyType: CullStateChangedEvent
+  - PropertyName: maskable
+    PropertyType: Boolean
+  - PropertyName: color
+    PropertyType: Color
+  - PropertyName: raycastTarget
+    PropertyType: Boolean
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: Color
+    PropertyType: Color
+  DstPropertyName:
+    PropertyName: color
+    PropertyType: Color
   _dstView: {fileID: 691889571}
   Converters: []
 --- !u!114 &691889569
@@ -1197,23 +1266,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 691889566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cc25e5c20d86bb409dcc096e7ebc5a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6595abb6b97bc344b91b7ec0b27c6f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SrcEventName: onClick
-  ViewModelName: UnityMVVM.Examples.TestViewModel
-  DstMethodName: ChangeColor
-  SrcEvents:
-  - onClick
-  DstMethods:
-  - ChangeColor
-  - SetText
-  ViewModels:
-  - UnityMVVM.Examples.OtherViewModel
-  - UnityMVVM.Examples.ReactiveViewModel
-  - UnityMVVM.Examples.TestViewModel
-  _srcView: {fileID: 691889570}
-  _dstViewModel: {fileID: 1679655145}
+  m_Delegates:
+  - eventID: 4
+    callback:
+      _calls:
+      - _mode: 1
+        _arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        _callState: 2
+        _target: {fileID: 0}
+        _methodName: ChangeColor
+        _vmName: UnityMVVM.Examples.ReactiveViewModel
+      _typeName: 
+      _eventId: 4
+      _callsDirty: 1
+    nanaynay: 
 --- !u!114 &691889570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1436,51 +1511,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewModel: {fileID: 0}
-  ViewModelName: UnityMVVM.Examples.TestViewModel
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
-  - State
-  - Text
-  - Color
-  - Color2
-  - Color3
-  - Color4
-  - Color5
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - isActiveAndEnabled
-  - transform
-  - gameObject
-  - tag
-  - name
-  - hideFlags
+  - PropertyName: IntProp
+    PropertyType: Int32
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
   DstProps:
-  - font
-  - text
-  - supportRichText
-  - resizeTextForBestFit
-  - resizeTextMinSize
-  - resizeTextMaxSize
-  - alignment
-  - alignByGeometry
-  - fontSize
-  - horizontalOverflow
-  - verticalOverflow
-  - lineSpacing
-  - fontStyle
-  - onCullStateChanged
-  - maskable
-  - color
-  - raycastTarget
-  - material
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - tag
-  - name
-  - hideFlags
-  SrcPropertyName: Color
-  DstPropertyName: text
+  - PropertyName: font
+    PropertyType: Font
+  - PropertyName: text
+    PropertyType: String
+  - PropertyName: supportRichText
+    PropertyType: Boolean
+  - PropertyName: resizeTextForBestFit
+    PropertyType: Boolean
+  - PropertyName: resizeTextMinSize
+    PropertyType: Int32
+  - PropertyName: resizeTextMaxSize
+    PropertyType: Int32
+  - PropertyName: alignment
+    PropertyType: TextAnchor
+  - PropertyName: alignByGeometry
+    PropertyType: Boolean
+  - PropertyName: fontSize
+    PropertyType: Int32
+  - PropertyName: horizontalOverflow
+    PropertyType: HorizontalWrapMode
+  - PropertyName: verticalOverflow
+    PropertyType: VerticalWrapMode
+  - PropertyName: lineSpacing
+    PropertyType: Single
+  - PropertyName: fontStyle
+    PropertyType: FontStyle
+  - PropertyName: onCullStateChanged
+    PropertyType: CullStateChangedEvent
+  - PropertyName: maskable
+    PropertyType: Boolean
+  - PropertyName: color
+    PropertyType: Color
+  - PropertyName: raycastTarget
+    PropertyType: Boolean
+  - PropertyName: material
+    PropertyType: Material
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: Color
+    PropertyType: ReactiveProperty`1
+  DstPropertyName:
+    PropertyName: text
+    PropertyType: String
   _dstView: {fileID: 1270270532}
   Converters:
   - {fileID: 1270270530}
@@ -1541,6 +1636,7 @@ GameObject:
   - component: {fileID: 1383601610}
   - component: {fileID: 1383601609}
   - component: {fileID: 1383601611}
+  - component: {fileID: 1383601615}
   m_Layer: 5
   m_Name: Bool To Color To String Test
   m_TagString: Untagged
@@ -1595,49 +1691,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewModel: {fileID: 1669541576}
-  ViewModelName: UnityMVVM.Examples.OtherViewModel
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
-  - IntProp
-  - BoolProp
-  - TestCollection
-  - SelectedModel
-  - Collection2
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - isActiveAndEnabled
-  - transform
-  - gameObject
-  - tag
-  - name
-  - hideFlags
+  - PropertyName: IntProp
+    PropertyType: Int32
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
   DstProps:
-  - font
-  - text
-  - supportRichText
-  - resizeTextForBestFit
-  - resizeTextMinSize
-  - resizeTextMaxSize
-  - alignment
-  - alignByGeometry
-  - fontSize
-  - horizontalOverflow
-  - verticalOverflow
-  - lineSpacing
-  - fontStyle
-  - onCullStateChanged
-  - maskable
-  - color
-  - raycastTarget
-  - material
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - tag
-  - name
-  - hideFlags
-  SrcPropertyName: BoolProp
-  DstPropertyName: text
+  - PropertyName: font
+    PropertyType: Font
+  - PropertyName: text
+    PropertyType: String
+  - PropertyName: supportRichText
+    PropertyType: Boolean
+  - PropertyName: resizeTextForBestFit
+    PropertyType: Boolean
+  - PropertyName: resizeTextMinSize
+    PropertyType: Int32
+  - PropertyName: resizeTextMaxSize
+    PropertyType: Int32
+  - PropertyName: alignment
+    PropertyType: TextAnchor
+  - PropertyName: alignByGeometry
+    PropertyType: Boolean
+  - PropertyName: fontSize
+    PropertyType: Int32
+  - PropertyName: horizontalOverflow
+    PropertyType: HorizontalWrapMode
+  - PropertyName: verticalOverflow
+    PropertyType: VerticalWrapMode
+  - PropertyName: lineSpacing
+    PropertyType: Single
+  - PropertyName: fontStyle
+    PropertyType: FontStyle
+  - PropertyName: onCullStateChanged
+    PropertyType: CullStateChangedEvent
+  - PropertyName: maskable
+    PropertyType: Boolean
+  - PropertyName: color
+    PropertyType: Color
+  - PropertyName: raycastTarget
+    PropertyType: Boolean
+  - PropertyName: material
+    PropertyType: Material
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: BoolProp
+    PropertyType: Boolean
+  DstPropertyName:
+    PropertyName: text
+    PropertyType: String
   _dstView: {fileID: 538402078}
   Converters:
   - {fileID: 1383601609}
@@ -1733,6 +1851,83 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1383601607}
   m_CullTransparentMesh: 0
+--- !u!114 &1383601615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383601607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7708fc3a686358d4da40d71b8a782bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 0}
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
+  SrcProps:
+  - PropertyName: IntProp
+    PropertyType: Int32
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
+  DstProps:
+  - PropertyName: sprite
+    PropertyType: Sprite
+  - PropertyName: overrideSprite
+    PropertyType: Sprite
+  - PropertyName: type
+    PropertyType: Type
+  - PropertyName: preserveAspect
+    PropertyType: Boolean
+  - PropertyName: fillCenter
+    PropertyType: Boolean
+  - PropertyName: fillMethod
+    PropertyType: FillMethod
+  - PropertyName: fillAmount
+    PropertyType: Single
+  - PropertyName: fillClockwise
+    PropertyType: Boolean
+  - PropertyName: fillOrigin
+    PropertyType: Int32
+  - PropertyName: alphaHitTestMinimumThreshold
+    PropertyType: Single
+  - PropertyName: useSpriteMesh
+    PropertyType: Boolean
+  - PropertyName: material
+    PropertyType: Material
+  - PropertyName: onCullStateChanged
+    PropertyType: CullStateChangedEvent
+  - PropertyName: maskable
+    PropertyType: Boolean
+  - PropertyName: color
+    PropertyType: Color
+  - PropertyName: raycastTarget
+    PropertyType: Boolean
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: BoolProp
+    PropertyType: Boolean
+  DstPropertyName:
+    PropertyName: color
+    PropertyType: Color
+  _dstView: {fileID: 1383601613}
+  Converters:
+  - {fileID: 1383601609}
 --- !u!1 &1630440230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1889,41 +2084,45 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1630440230}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e31f2e59e31301c4bba62b78cf483dd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _viewModel: {fileID: 0}
-  ViewModelName: UnityMVVM.Examples.TestViewModel
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcProps:
-  - State
-  - Text
-  - Color
-  - Color2
-  - Color3
-  - Color4
-  - Color5
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - isActiveAndEnabled
-  - transform
-  - gameObject
-  - tag
-  - name
-  - hideFlags
+  - PropertyName: IntProp
+    PropertyType: Int32
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
   DstProps:
-  - ElementVisibility
-  - Alpha
-  - useGUILayout
-  - runInEditMode
-  - enabled
-  - tag
-  - name
-  - hideFlags
-  SrcPropertyName: State
-  DstPropertyName: ElementVisibility
+  - PropertyName: ElementVisibility
+    PropertyType: Visibility
+  - PropertyName: Alpha
+    PropertyType: Single
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: IntProp
+    PropertyType: ReactiveProperty`1
+  DstPropertyName:
+    PropertyName: ElementVisibility
+    PropertyType: Visibility
   _dstView: {fileID: 1630440238}
   Converters:
   - {fileID: 1630440233}

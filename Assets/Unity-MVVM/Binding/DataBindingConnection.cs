@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using UniRx;
 using UnityEngine;
 using UnityMVVM.Binding.Converters;
 
@@ -20,6 +23,7 @@ namespace UnityMVVM.Binding
         readonly BindTarget _src;
         readonly BindTarget _dst;
         private readonly IValueConverter[] _converters;
+        private IDisposable _subscription = null;
         GameObject _gameObject;
 
         public bool IsBound;
@@ -63,12 +67,19 @@ namespace UnityMVVM.Binding
 
         internal void Unbind()
         {
-            if (IsBound)
+            if (!IsBound) return;
+            if (_src.IsReactive)
             {
-                (_src.propertyOwner as INotifyPropertyChanged).PropertyChanged -= PropertyChangedHandler;
-                IsBound = false;
+                if (!(_subscription is null))
+                {
+                    _subscription.Dispose();
+                    _subscription = null;
+                }
             }
+            else
+                (_src.propertyOwner as INotifyPropertyChanged).PropertyChanged -= PropertyChangedHandler;
 
+            IsBound = false;
         }
 
         public static string GetName<T>(Expression<Func<T>> e)
@@ -79,11 +90,20 @@ namespace UnityMVVM.Binding
 
         internal void Bind()
         {
-            if (!IsBound)
+            if (IsBound) return;
+            if (_src.IsReactive)
             {
-                (_src.propertyOwner as INotifyPropertyChanged).PropertyChanged += PropertyChangedHandler;
-                IsBound = true;
+                var methodInfo = _src.propertyOwner.GetType().GetMethod("NonGenericSubscribe",BindingFlags.NonPublic|BindingFlags.Instance);
+                _subscription = (IDisposable) methodInfo.Invoke(_src.propertyOwner,
+                    new[]
+                    {
+                        new Action<object>(o => PropertyChangedHandler(_src.propertyOwner,
+                            new PropertyChangedEventArgs(_src.propertyName)))
+                    });
             }
+            else
+                (_src.propertyOwner as INotifyPropertyChanged).PropertyChanged += PropertyChangedHandler;
+            IsBound = true;
         }
 
         public void OnSrcUpdated()

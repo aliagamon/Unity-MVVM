@@ -96,7 +96,7 @@ public class BindingMonitorEditorWindow : EditorWindow
 
         foreach (var item in oneWays)
         {
-            var str = string.Format("<b>{0}</b> Src: <b>{1}:{2}</b> Dst: <b>{3}:{4}</b> Bound: <b>{5}</b>", item.gameObject.name, item.ViewModelName, item.SrcPropertyName, item._dstView.GetType().Name, item.DstPropertyName, item.Connection == null ? false : item.Connection.IsBound);
+            var str = string.Format("<b>{0}</b> Src: <b>{1}:{2}</b> Dst: <b>{3}:{4}</b> Bound: <b>{5}</b>", item.gameObject.name, item.ViewModelName, item.SrcPropertyName, item._dstView.GetType().Name, item.DstPropertyName.PropertyName, item.Connection == null ? false : item.Connection.IsBound);
 
             bool contains = ignoreCase ? str.ToLower().Contains(filter.ToLower()) : str.Contains(filter);
 
@@ -111,7 +111,7 @@ public class BindingMonitorEditorWindow : EditorWindow
         twoWayScrollPos = EditorGUILayout.BeginScrollView(twoWayScrollPos, GUILayout.MaxHeight(400));
         foreach (var item in twoWays)
         {
-            var str = string.Format("<b>{0}</b> Src: <b>{1}/{2}</b> Dst: <b>{3}/{4}</b> Event: <b>{4}</b> Bound: <b>{5}</b>", item.gameObject.name, item.ViewModelName, item.SrcPropertyName, item._dstView.GetType().Name, item.DstPropertyName, item._dstChangedEventName, item.Connection == null ? false : item.Connection.IsBound);
+            var str = string.Format("<b>{0}</b> Src: <b>{1}/{2}</b> Dst: <b>{3}/{4}</b> Event: <b>{4}</b> Bound: <b>{5}</b>", item.gameObject.name, item.ViewModelName, item.SrcPropertyName, item._dstView.GetType().Name, item.DstPropertyName.PropertyName, item._dstChangedEventName, item.Connection == null ? false : item.Connection.IsBound);
 
             if (string.IsNullOrEmpty(filter) || str.Contains(filter))
                 EditorGUILayout.LabelField(str, style);

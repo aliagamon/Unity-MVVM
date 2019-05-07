@@ -32,7 +32,7 @@ namespace UnityMVVM.Binding
             base.OnValidate();
 
             _dstView = this;
-            DstPropertyName = nameof(IsActive);
+            DstPropertyName = new BindablePropertyInfo(nameof(IsActive), IsActive.GetType().Name);
         }
     }
 }

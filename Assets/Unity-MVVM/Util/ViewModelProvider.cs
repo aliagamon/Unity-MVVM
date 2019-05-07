@@ -44,6 +44,12 @@ namespace UnityMVVM.Util
             return asm.GetType(viewModelTypeString).GetProperties();
         }
 
+        public static FieldInfo[] GetViewModelFields(string viewModelTypeString)
+        {
+            Assembly asm = typeof(ViewModelBase).Assembly;
+            return asm.GetType(viewModelTypeString).GetFields();
+        }
+
         internal ViewModelBase GetViewModelBehaviour(string viewModelName)
         {
 
