@@ -39,3 +39,6 @@ sysinfo.txt
 *.swp
 *.vim
 *.swo
+.idea/
+Assets/Plugins/Editor.meta
+Assets/Plugins/Editor/
