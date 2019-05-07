@@ -238,14 +238,16 @@ MonoBehaviour:
   SrcProps:
   - PropertyName: State
     PropertyType: ApplicationState
-  - PropertyName: IntProp
-    PropertyType: Int32
   - PropertyName: Text
     PropertyType: String
   - PropertyName: BoolProp
     PropertyType: Boolean
   - PropertyName: Color
     PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
+  - PropertyName: ChangeColor
+    PropertyType: Can Execute
   DstProps:
   - PropertyName: sprite
     PropertyType: Sprite
@@ -730,14 +732,14 @@ MonoBehaviour:
   SrcProps:
   - PropertyName: State
     PropertyType: ApplicationState
-  - PropertyName: IntProp
-    PropertyType: Int32
   - PropertyName: Text
     PropertyType: String
   - PropertyName: BoolProp
     PropertyType: Boolean
   - PropertyName: Color
     PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
   DstProps:
   - PropertyName: shouldHideMobileInput
     PropertyType: Boolean
@@ -1202,14 +1204,16 @@ MonoBehaviour:
   SrcProps:
   - PropertyName: State
     PropertyType: ApplicationState
-  - PropertyName: IntProp
-    PropertyType: Int32
   - PropertyName: Text
     PropertyType: String
   - PropertyName: BoolProp
     PropertyType: Boolean
   - PropertyName: Color
     PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
+  - PropertyName: ChangeColor
+    PropertyType: Can Execute
   DstProps:
   - PropertyName: sprite
     PropertyType: Sprite
@@ -1466,6 +1470,8 @@ GameObject:
   - component: {fileID: 1270270532}
   - component: {fileID: 1270270531}
   - component: {fileID: 1270270530}
+  - component: {fileID: 1270270535}
+  - component: {fileID: 1270270534}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1521,14 +1527,16 @@ MonoBehaviour:
   SrcProps:
   - PropertyName: State
     PropertyType: ApplicationState
-  - PropertyName: IntProp
-    PropertyType: Int32
   - PropertyName: Text
     PropertyType: String
   - PropertyName: BoolProp
     PropertyType: Boolean
   - PropertyName: Color
     PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
+  - PropertyName: ChangeColor
+    PropertyType: Can Execute
   DstProps:
   - PropertyName: font
     PropertyType: Font
@@ -1629,6 +1637,105 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1270270528}
   m_CullTransparentMesh: 0
+--- !u!114 &1270270534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270270528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a090e86b425a7d243bfd689bddc43abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trueColor: {r: 1, g: 1, b: 1, a: 1}
+  _falseColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &1270270535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270270528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7708fc3a686358d4da40d71b8a782bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 0}
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
+  SrcProps:
+  - PropertyName: State
+    PropertyType: ApplicationState
+  - PropertyName: Text
+    PropertyType: String
+  - PropertyName: BoolProp
+    PropertyType: Boolean
+  - PropertyName: Color
+    PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
+  - PropertyName: ChangeColor
+    PropertyType: Can Execute
+  DstProps:
+  - PropertyName: font
+    PropertyType: Font
+  - PropertyName: text
+    PropertyType: String
+  - PropertyName: supportRichText
+    PropertyType: Boolean
+  - PropertyName: resizeTextForBestFit
+    PropertyType: Boolean
+  - PropertyName: resizeTextMinSize
+    PropertyType: Int32
+  - PropertyName: resizeTextMaxSize
+    PropertyType: Int32
+  - PropertyName: alignment
+    PropertyType: TextAnchor
+  - PropertyName: alignByGeometry
+    PropertyType: Boolean
+  - PropertyName: fontSize
+    PropertyType: Int32
+  - PropertyName: horizontalOverflow
+    PropertyType: HorizontalWrapMode
+  - PropertyName: verticalOverflow
+    PropertyType: VerticalWrapMode
+  - PropertyName: lineSpacing
+    PropertyType: Single
+  - PropertyName: fontStyle
+    PropertyType: FontStyle
+  - PropertyName: onCullStateChanged
+    PropertyType: CullStateChangedEvent
+  - PropertyName: maskable
+    PropertyType: Boolean
+  - PropertyName: color
+    PropertyType: Color
+  - PropertyName: raycastTarget
+    PropertyType: Boolean
+  - PropertyName: material
+    PropertyType: Material
+  - PropertyName: useGUILayout
+    PropertyType: Boolean
+  - PropertyName: runInEditMode
+    PropertyType: Boolean
+  - PropertyName: enabled
+    PropertyType: Boolean
+  - PropertyName: tag
+    PropertyType: String
+  - PropertyName: name
+    PropertyType: String
+  - PropertyName: hideFlags
+    PropertyType: HideFlags
+  SrcPropertyName:
+    PropertyName: ChangeColor
+    PropertyType: Can Execute
+  DstPropertyName:
+    PropertyName: color
+    PropertyType: Color
+  _dstView: {fileID: 1270270532}
+  Converters:
+  - {fileID: 1270270534}
 --- !u!1 &1383601607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,14 +1810,16 @@ MonoBehaviour:
   SrcProps:
   - PropertyName: State
     PropertyType: ApplicationState
-  - PropertyName: IntProp
-    PropertyType: Int32
   - PropertyName: Text
     PropertyType: String
   - PropertyName: BoolProp
     PropertyType: Boolean
   - PropertyName: Color
     PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
+  - PropertyName: ChangeColor
+    PropertyType: Can Execute
   DstProps:
   - PropertyName: font
     PropertyType: Font
@@ -1878,14 +1987,16 @@ MonoBehaviour:
   SrcProps:
   - PropertyName: State
     PropertyType: ApplicationState
-  - PropertyName: IntProp
-    PropertyType: Int32
   - PropertyName: Text
     PropertyType: String
   - PropertyName: BoolProp
     PropertyType: Boolean
   - PropertyName: Color
     PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
+  - PropertyName: ChangeColor
+    PropertyType: Can Execute
   DstProps:
   - PropertyName: sprite
     PropertyType: Sprite
@@ -2106,14 +2217,14 @@ MonoBehaviour:
   SrcProps:
   - PropertyName: State
     PropertyType: ApplicationState
-  - PropertyName: IntProp
-    PropertyType: Int32
   - PropertyName: Text
     PropertyType: String
   - PropertyName: BoolProp
     PropertyType: Boolean
   - PropertyName: Color
     PropertyType: Color
+  - PropertyName: Flagger
+    PropertyType: Boolean
   DstProps:
   - PropertyName: ElementVisibility
     PropertyType: Visibility

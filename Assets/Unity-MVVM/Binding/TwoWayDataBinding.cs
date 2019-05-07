@@ -61,6 +61,11 @@ namespace UnityMVVM.Binding
             UpdateBindings();
         }
 
+        protected override IEnumerable<BindablePropertyInfo> GetExtraViewModelProperties(FieldInfo[] fields)
+        {
+            return new BindablePropertyInfo[0];
+        }
+
         public override void UpdateBindings()
         {
             base.UpdateBindings();

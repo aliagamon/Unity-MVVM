@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
+using Util;
 
 namespace UnityMVVM.Binding
 {
@@ -18,12 +20,31 @@ namespace UnityMVVM.Binding
 
         public readonly bool IsReactive;
 
-        public BindTarget(object propOwner, string propName, string path = null, UnityEvent dstChangedEvent = null, bool isReactive = false)
+        public readonly bool IsCommand;
+
+        private readonly object _command;
+
+        public BindTarget(object propOwner, string propName, string path = null, UnityEvent dstChangedEvent = null, bool isReactive = false, bool isCommand = false)
         {
-            propertyOwner = isReactive ? propOwner.GetType().GetField(propName).GetValue(propOwner) : propOwner;
+            if (isReactive)
+            {
+                    propertyOwner = propOwner.GetType().GetField(propName).GetValue(propOwner);
+                    if (isCommand)
+                    {
+                        _command = propertyOwner;
+                        propertyOwner = propertyOwner.GetType()
+                            .GetFieldRecursive("canExecute", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .GetValue(propertyOwner);
+                        
+                    }
+
+            }
+            else
+                propertyOwner = propOwner;
             propertyName = propName;
             propertyPath = path;
             IsReactive = isReactive;
+            IsCommand = isCommand;
 
             if (propertyOwner == null)
             {
@@ -31,12 +52,7 @@ namespace UnityMVVM.Binding
                 return;
             }
 
-            if (isReactive)
-            {
-                property = propertyOwner.GetType().GetProperty("Value");
-            }
-            else
-                property = propertyOwner.GetType().GetProperty(propertyName);//.ResolvePath(path);
+            property = propertyOwner.GetType().GetProperty(isReactive ? "Value" : propertyName);
 
             if (dstChangedEvent != null)
                 dstChangedEvent.AddListener(new UnityAction(() =>
@@ -89,6 +105,24 @@ namespace UnityMVVM.Binding
 
                 prop.SetValue(owner, src, null);
             }
+        }
+
+        public IDisposable ReactiveBind(PropertyChangedEventHandler handler)
+        {
+            MethodInfo methodInfo;
+            if (IsCommand)
+                methodInfo = _command.GetType()
+                    .GetMethod("NonGenericSubscribe", BindingFlags.NonPublic | BindingFlags.Instance);
+            else
+                methodInfo = propertyOwner.GetType()
+                    .GetMethod("NonGenericSubscribe", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            return (IDisposable) methodInfo.Invoke(IsCommand ? _command : propertyOwner,
+                new[]
+                {
+                    new Action<object>(o => handler(propertyOwner,
+                        new PropertyChangedEventArgs(propertyName)))
+                });
         }
     }
 }

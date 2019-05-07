@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityMVVM.Binding;
 
@@ -33,6 +34,11 @@ namespace UnityMVVM.Binding
 
             _dstView = this;
             DstPropertyName = new BindablePropertyInfo(nameof(IsActive), IsActive.GetType().Name);
+        }
+
+        protected override IEnumerable<BindablePropertyInfo> GetExtraViewModelProperties(FieldInfo[] fields)
+        {
+            return new BindablePropertyInfo[0];
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace Util
 {
@@ -21,6 +22,27 @@ namespace Util
             if (baseType == null) return false;
 
             return IsAssignableToGenericType(baseType, genericType);
+        }
+
+        public static FieldInfo GetFieldRecursive(this Type givenType, string fieldName, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic)
+        {
+            FieldInfo fi = null;
+
+            while (givenType != null) 
+            {
+                fi = givenType.GetField(fieldName, bindingFlags);
+
+                if (fi != null) break;
+
+                givenType = givenType.BaseType; 
+            }
+
+            if (fi == null)
+            {
+                throw new Exception($"Field '{fieldName}' not found in type hierarchy.");
+            }
+
+            return fi;
         }
     }
 }

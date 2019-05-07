@@ -27,17 +27,11 @@ namespace UnityMVVM.Binding
         [HideInInspector]
         public BindablePropertyInfo SrcPropertyName = null;
 
-        //[HideInInspector]
-        //public string DstPropertyName = null;
-
         [HideInInspector]
         public BindablePropertyInfo DstPropertyName = null;
 
         [SerializeField]
         public UnityEngine.Component _dstView;
-
-        // [SerializeField]
-        // protected ValueConverterBase _converter;
 
         [SerializeField][HideInInspector]
         protected ValueConverterBase[] Converters;
@@ -99,7 +93,16 @@ namespace UnityMVVM.Binding
                         && !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true)
                             .Any())
                     .Select(e => new BindablePropertyInfo(e.Name, e.FieldType.IsGenericType ? e.FieldType.GetGenericArguments()[0].Name : e.FieldType.BaseType.GetGenericArguments()[0].Name)).ToList();
+                SrcProps.AddRange(GetExtraViewModelProperties(props));
             }
+        }
+
+        protected virtual IEnumerable<BindablePropertyInfo> GetExtraViewModelProperties(FieldInfo[] fields)
+        {
+            return fields.Where(field => field.FieldType.IsAssignableToGenericType(typeof(Reactive.ReactiveCommand<>))
+                    && !field.GetCustomAttributes(typeof(ObsoleteAttribute), true)
+                    .Any()
+                    ).Select(e => new BindablePropertyInfo(e.Name, "Can Execute"));
         }
 
         private void Start()

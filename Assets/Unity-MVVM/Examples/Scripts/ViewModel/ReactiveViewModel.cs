@@ -1,8 +1,9 @@
 using System;
-using UniRx;
 using UnityMVVM.ViewModel;
 using UnityEngine;
 using System.Collections;
+using UniRx;
+using UnityMVVM.Reactive;
 using BoolReactiveProperty = UnityMVVM.Reactive.BoolReactiveProperty;
 using ColorReactiveProperty = UnityMVVM.Reactive.ColorReactiveProperty;
 using Random = UnityEngine.Random;
@@ -13,12 +14,13 @@ namespace UnityMVVM.Examples
     public class ReactiveViewModel : ViewModelBase
     {
         public Reactive.ReactiveProperty<ApplicationState> State = new Reactive.ReactiveProperty<ApplicationState>();
-        public Reactive.ReactiveProperty<int> IntProp = new Reactive.ReactiveProperty<int>(10);
+        public UniRx.ReactiveProperty<int> IntProp = new UniRx.ReactiveProperty<int>(10);
         public StringReactiveProperty Text = new StringReactiveProperty();
         public BoolReactiveProperty BoolProp = new BoolReactiveProperty();
         public ColorReactiveProperty Color = new ColorReactiveProperty();
-        public ReactiveCommand<int> TestCommand;
-        public ReactiveCommand ChangeColor = new ReactiveCommand();
+        public UniRx.ReactiveCommand<int> TestCommand;
+        public Reactive.ReactiveCommand ChangeColor;
+        public BoolReactiveProperty Flagger = new BoolReactiveProperty();
 
         public int Result;
 
@@ -30,7 +32,8 @@ namespace UnityMVVM.Examples
                 Debug.unityLogger.Log($"val = {val} IntProp.Value = {IntProp.Value}");
                 IntProp.Value -= 1;
             });
-            ChangeColor.Subscribe((_) => Color.Value = Random.ColorHSV());
+            ChangeColor = Observable.EveryUpdate().Select(l => l % 2 == 0).ToMVVMReactiveCommand();
+            ChangeColor.Subscribe(_ => Color.Value = Random.ColorHSV());
         }
 
         public void Start()

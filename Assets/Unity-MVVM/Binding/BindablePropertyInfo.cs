@@ -35,6 +35,7 @@ namespace UnityMVVM.Binding
 
         public BindTarget ToBindTarget(object owner, bool isReactive = false, string path = null,
             UnityEngine.Events.UnityEvent dstChangedEvent = null) =>
-            new BindTarget(owner, PropertyName, path, dstChangedEvent, isReactive);
+            new BindTarget(owner, PropertyName, path, dstChangedEvent, isReactive,
+                PropertyType.Replace(" ", "").ToLower().Equals("canexecute"));
     }
 }
