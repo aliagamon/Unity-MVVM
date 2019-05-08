@@ -41,7 +41,7 @@ namespace UnityMVVM.Examples
         {
             Text.Value = DateTime.Now.ToShortTimeString();
             StartCoroutine(ChangeRoutine());
-            TestCollection.ObserveAdd().Subscribe(e => Debug.Log(e)); ;
+//            TestCollection.ObserveAdd().Subscribe(e => Debug.Log(e)); ;
         }
 
         public void Update()
