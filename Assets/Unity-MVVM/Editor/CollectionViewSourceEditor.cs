@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEditor;
 using UnityMVVM.Binding;
+using System.Collections.Generic;
 
 namespace UnityMVVM.Editor
 {
@@ -9,12 +10,12 @@ namespace UnityMVVM.Editor
     {
         public int _srcIndex = 0;
 
-        SerializedProperty _srcNameProp;
+        private List<string> _srcNameProp;
 
         protected override void CollectSerializedProperties()
         {
             base.CollectSerializedProperties();
-            _srcNameProp = serializedObject.FindProperty("SrcCollectionName");
+            _srcNameProp = serializedObject.FindProperty("SrcCollections").GetPropertiesArray();
         }
 
         protected override void DrawChangeableElements()
@@ -24,7 +25,7 @@ namespace UnityMVVM.Editor
             var myClass = target as CollectionViewSource;
             EditorGUILayout.LabelField("Source Collection");
 
-            _srcIndex = EditorGUILayout.Popup(_srcIndex, myClass.SrcCollections.ToArray());
+            _srcIndex = EditorGUILayout.Popup(_srcIndex, _srcNameProp.ToArray());
 
         }
 
@@ -39,9 +40,11 @@ namespace UnityMVVM.Editor
         public override void OnInspectorGUI()
         {
 
-            var myClass = target as CollectionViewSource;
+            if(!(target is CollectionViewSource myClass)) return;
 
-            _srcIndex = myClass.SrcCollections.IndexOf(_srcNameProp.stringValue);
+            _srcIndex = myClass.SrcCollectionName is null
+                ? -1
+                : myClass.SrcCollections.FindIndex(c => c.PropertyName == myClass.SrcCollectionName.PropertyName);
 
             if (_srcIndex < 0 && myClass.SrcCollections.Count > 0)
             {

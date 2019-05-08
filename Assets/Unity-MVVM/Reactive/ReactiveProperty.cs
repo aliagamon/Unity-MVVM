@@ -3,7 +3,7 @@ using UniRx;
 
 namespace UnityMVVM.Reactive
 {
-    public class ReactiveProperty<T> : UniRx.ReactiveProperty<T>
+    public class ReactiveProperty<T> : UniRx.ReactiveProperty<T>, IBoxedSubscribe
     {
         public ReactiveProperty()
         {
@@ -13,7 +13,7 @@ namespace UnityMVVM.Reactive
         {
         }
 
-        internal IDisposable NonGenericSubscribe(Action<object> onNext)
+        public IDisposable NonGenericSubscribe(Action<object> onNext)
         {
             return this.Subscribe(obj => onNext.Invoke(obj));
         }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Collections.Specialized;
 using System.Reflection;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityMVVM.Reactive;
 using Util;
 
 namespace UnityMVVM.Binding
@@ -35,7 +38,6 @@ namespace UnityMVVM.Binding
                         propertyOwner = propertyOwner.GetType()
                             .GetFieldRecursive("canExecute", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(propertyOwner);
-                        
                     }
 
             }
@@ -109,20 +111,37 @@ namespace UnityMVVM.Binding
 
         public IDisposable ReactiveBind(PropertyChangedEventHandler handler)
         {
-            MethodInfo methodInfo;
-            if (IsCommand)
-                methodInfo = _command.GetType()
-                    .GetMethod("NonGenericSubscribe", BindingFlags.NonPublic | BindingFlags.Instance);
-            else
-                methodInfo = propertyOwner.GetType()
-                    .GetMethod("NonGenericSubscribe", BindingFlags.NonPublic | BindingFlags.Instance);
+//            MethodInfo methodInfo;
+//            if (IsCommand)
+//                methodInfo = _command.GetType()
+//                    .GetMethod("NonGenericSubscribe", BindingFlags.NonPublic | BindingFlags.Instance);
+//            else
+//                methodInfo = propertyOwner.GetType()
+//                    .GetMethod("NonGenericSubscribe", BindingFlags.NonPublic | BindingFlags.Instance);
+//
+//            return (IDisposable) methodInfo.Invoke(IsCommand ? _command : propertyOwner,
+//                new[]
+//                {
+//                    new Action<object>(o => handler(propertyOwner,
+//                        new PropertyChangedEventArgs(propertyName)))
+//                });
+            var boxedSubscribe = IsCommand ? _command as IBoxedSubscribe : propertyOwner as IBoxedSubscribe;
+            return boxedSubscribe?.NonGenericSubscribe(o => handler(propertyOwner, new PropertyChangedEventArgs(propertyName)));
+        }
 
-            return (IDisposable) methodInfo.Invoke(IsCommand ? _command : propertyOwner,
-                new[]
-                {
-                    new Action<object>(o => handler(propertyOwner,
-                        new PropertyChangedEventArgs(propertyName)))
-                });
+        public IDisposable ReactiveCollectionBind(Action<CollectionAddEvent> addHandler, Action<CollectionRemoveEvent> removeHandler, Action<CollectionReplaceEvent> replaceHandler, Action<CollectionMoveEvent> moveHandle, Action<Unit> resetHandler)
+        {
+            var compositeDisposable = new CompositeDisposable(5);
+            if(propertyOwner is IBoxedCollectionSubscribe unboxed)
+            {
+                compositeDisposable.Add(unboxed.NonGenericSubscribeAdd(o => addHandler.Invoke((CollectionAddEvent) o)));
+                compositeDisposable.Add(unboxed.NonGenericSubscribeRemove(o => removeHandler.Invoke((CollectionRemoveEvent) o)));
+                compositeDisposable.Add(unboxed.NonGenericSubscribeReplace(o => replaceHandler.Invoke((CollectionReplaceEvent) o)));
+                compositeDisposable.Add(unboxed.NonGenericSubscribeMove(o => moveHandle.Invoke((CollectionMoveEvent) o)));
+                compositeDisposable.Add(unboxed.NonGenericSubscribeReset(o => resetHandler.Invoke((Unit) o)));
+            }
+
+            return compositeDisposable;
         }
     }
 }

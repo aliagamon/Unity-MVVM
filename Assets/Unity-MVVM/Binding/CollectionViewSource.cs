@@ -7,6 +7,8 @@ using System.Linq;
 using System.Reflection;
 using UnityMVVM.Util;
 using UnityMVVM.Model;
+using UniRx;
+using Util;
 
 namespace UnityMVVM.Binding
 {
@@ -15,15 +17,17 @@ namespace UnityMVVM.Binding
         INotifyCollectionChanged srcCollection;
 
         [HideInInspector]
-        public List<string> SrcCollections = new List<string>();
+        public List<BindablePropertyInfo> SrcCollections = new List<BindablePropertyInfo>();
 
         [HideInInspector]
-        public string SrcCollectionName;
+        public BindablePropertyInfo SrcCollectionName;
 
-        public Action<int, IList> OnElementsAdded;
-        public Action<int, IList> OnElementsRemoved;
-        public Action<int, IList> OnCollectionReset;
-        public Action<int, IList> OnElementUpdated;
+
+        public Action<int, object> OnElementAdded;
+        public Action<int, object> OnElementRemoved;
+        public Action<int, object, object> OnElementReplaced;
+        public Action<int, int> OnElementMove;
+        public Action OnCollectionReset;
 
         public Action<IModel> OnSelectedItemUpdated;
 
@@ -47,6 +51,8 @@ namespace UnityMVVM.Binding
         BindTarget src;
 
         DataBindingConnection _conn;
+
+        private IDisposable _subscription = null;
 
         bool isBound = false;
 
@@ -77,59 +83,70 @@ namespace UnityMVVM.Binding
 
         public override void RegisterDataBinding()
         {
+            if (isBound) return;
             if (_viewModel == null)
             {
-                Debug.LogErrorFormat("Binding Error | Could not Find ViewModel {0} for collection {1}", ViewModelName, SrcCollectionName);
+                Debug.LogErrorFormat("Binding Error | Could not Find ViewModel {0} for collection {1}", ViewModelName,
+                    SrcCollectionName);
 
                 return;
             }
 
-            src = new BindTarget(_viewModel, SrcCollectionName);
-            srcCollection = src.GetValue() as INotifyCollectionChanged;
+            src = SrcCollectionName.ToBindTarget(_viewModel, true);
+            if (!(src is null))
+                _subscription = src.ReactiveCollectionBind(CollectionAdd, CollectionRemove, CollectionReplace,
+                    CollectionMove, CollectionReset);
 
-            if (srcCollection != null && !isBound)
-                srcCollection.CollectionChanged += CollectionChanged;
-
-            if (!string.IsNullOrEmpty(SelectedItemPropName) && _conn == null)
-            {
-                _conn = new DataBindingConnection(gameObject, new BindTarget(_viewModel, SelectedItemPropName), new BindTarget(this, nameof(SelectedItem)));
-                _conn.OnSrcUpdated();
-                _conn.Bind();
-            }
 
             isBound = true;
         }
 
         public override void UnregisterDataBinding()
         {
-            if (srcCollection != null && isBound)
+            if (!isBound) return;
+            if (!(_subscription is null))
+            {
+                _subscription.Dispose();
+                _subscription = null;
+            }
+            if (srcCollection != null)
                 srcCollection.CollectionChanged -= CollectionChanged;
+            isBound = false;
         }
 
         protected virtual void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    OnElementsAdded?.Invoke(e.NewStartingIndex, e.NewItems);
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    OnElementsRemoved?.Invoke(e.OldStartingIndex, e.OldItems);
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    OnElementUpdated.Invoke(e.NewStartingIndex, e.NewItems);
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    OnCollectionReset?.Invoke(e.NewStartingIndex, e.NewItems);
-                    break;
-                default:
-                    break;
-            }
+//            switch (e.Action)
+//            {
+//                case NotifyCollectionChangedAction.Add:
+//                    OnElementsAdded?.Invoke(e.NewStartingIndex, e.NewItems);
+//                    break;
+//                case NotifyCollectionChangedAction.Move:
+//                    break;
+//                case NotifyCollectionChangedAction.Remove:
+//                    OnElementsRemoved?.Invoke(e.OldStartingIndex, e.OldItems);
+//                    break;
+//                case NotifyCollectionChangedAction.Replace:
+//                    OnElementUpdated.Invoke(e.NewStartingIndex, e.NewItems);
+//                    break;
+//                case NotifyCollectionChangedAction.Reset:
+//                    OnCollectionReset?.Invoke(e.NewStartingIndex, e.NewItems);
+//                    break;
+//                default:
+//                    break;
+//            }
 
             OnSelectedItemUpdated?.Invoke(SelectedItem);
         }
+
+        protected virtual void CollectionAdd(Reactive.CollectionAddEvent e) => OnElementAdded?.Invoke(e.Index, e.Value);
+
+        protected virtual void CollectionRemove(Reactive.CollectionRemoveEvent e) => OnElementRemoved?.Invoke(e.Index, e.Value);
+
+        protected virtual void CollectionReplace(Reactive.CollectionReplaceEvent e) => OnElementReplaced?.Invoke(e.Index, e.OldValue, e.NewValue);
+        protected virtual void CollectionMove(Reactive.CollectionMoveEvent e) => OnElementMove?.Invoke(e.OldIndex, e.NewIndex);
+
+        protected virtual void CollectionReset(Unit e) => OnCollectionReset?.Invoke();
 
         public override void UpdateBindings()
         {
@@ -137,12 +154,12 @@ namespace UnityMVVM.Binding
 
             if (!string.IsNullOrEmpty(ViewModelName))
             {
-                var props = ViewModelProvider.GetViewModelProperties(ViewModelName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+                var props = ViewModelProvider.GetViewModelFields(ViewModelName);
 
                 SrcCollections = props.Where(prop =>
-                        typeof(INotifyCollectionChanged).IsAssignableFrom(prop.PropertyType)
+                        prop.FieldType.IsAssignableToGenericType(typeof(ReactiveCollection<>))
                         && !prop.GetCustomAttributes(typeof(ObsoleteAttribute), true).Any()
-                    ).Select(e => e.Name).ToList();
+                    ).Select(e => new BindablePropertyInfo(e.Name, e.FieldType.GenericTypeArguments[0].Name)).ToList();
 
 
             }

@@ -21,6 +21,7 @@ namespace UnityMVVM.Examples
         public UniRx.ReactiveCommand<int> TestCommand;
         public Reactive.ReactiveCommand ChangeColor;
         public BoolReactiveProperty Flagger = new BoolReactiveProperty();
+        public Reactive.ReactiveCollection<DataModel> TestCollection = new Reactive.ReactiveCollection<DataModel>();
 
         public int Result;
 
@@ -32,28 +33,35 @@ namespace UnityMVVM.Examples
                 Debug.unityLogger.Log($"val = {val} IntProp.Value = {IntProp.Value}");
                 IntProp.Value -= 1;
             });
-            ChangeColor = Observable.EveryUpdate().Select(l => l % 2 == 0).ToMVVMReactiveCommand();
+            ChangeColor = Flagger.ToMVVMReactiveCommand();
             ChangeColor.Subscribe(_ => Color.Value = Random.ColorHSV());
         }
 
         public void Start()
         {
             Text.Value = DateTime.Now.ToShortTimeString();
-            StartCoroutine(StateChangeRoutine());
+            StartCoroutine(ChangeRoutine());
+            TestCollection.ObserveAdd().Subscribe(e => Debug.Log(e)); ;
         }
 
         public void Update()
         {
-            if(DateTime.Now.Second % 5 == 0)
+            if (DateTime.Now.Second % 5 == 0)
                 Text.Value = DateTime.Now.ToShortTimeString();
             BoolProp.Value = (DateTime.Now.Second % 2 == 0);
         }
 
-        private IEnumerator StateChangeRoutine()
+        private IEnumerator ChangeRoutine()
         {
             while (true)
             {
                 State.Value = (ApplicationState)((int)(State.Value + 1) % 3);
+                Flagger.Value = DateTime.Now.Second % 2 == 0;
+                if (TestCollection.Count > 0)
+                    TestCollection.RemoveAt(Random.Range(0, TestCollection.Count - 1));
+                for (var i = 0; i < 2; i++)
+                    TestCollection.Add(new DataModel
+                        {message = Random.Range(0, 1000).ToString(), color = Random.ColorHSV()});
                 yield return new WaitForSeconds(3f);
             }
         }

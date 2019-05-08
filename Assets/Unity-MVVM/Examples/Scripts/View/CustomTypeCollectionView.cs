@@ -11,7 +11,7 @@ namespace UnityMVVM
     {
         public class CustomTypeCollectionView : CollectionViewBase
         {
-            protected override void UpdateElement(int index, IList newItems)
+            protected virtual void UpdateElement(int index, IList newItems)
             {
                 var item = newItems[0] as DataModel;
 

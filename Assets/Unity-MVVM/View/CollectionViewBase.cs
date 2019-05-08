@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,13 +28,25 @@ namespace UnityMVVM
             {
                 if (_src != null)
                 {
-                    _src.OnElementsAdded += AddElements;
-                    _src.OnElementsRemoved += RemoveElements;
+                    _src.OnElementAdded += AddElement;
+                    _src.OnElementRemoved += RemoveElement;
+                    _src.OnElementReplaced += ReplaceElement;
+                    _src.OnElementMove += MoveElement;
                     _src.OnCollectionReset += ResetView;
-                    _src.OnElementUpdated += UpdateElement;
+
                 }
 
                 _src.OnSelectedItemUpdated += UpdateSelectedItem;
+            }
+
+            protected virtual void MoveElement(int oldIndex, int newIndex)
+            {
+                // Do Nothing
+            }
+
+            protected virtual void ReplaceElement(int index, object oldValue, object newValue)
+            {
+                // Do Nothing
             }
 
             private void UpdateSelectedItem(IModel obj)
@@ -44,17 +55,6 @@ namespace UnityMVVM
 
                 foreach (var item in items)
                     item?.SetSelected(item.Model == obj);
-            }
-
-            protected virtual void UpdateElement(int index, IList newItems)
-            {
-                // Do Nothing
-                //var toUpdate = InstantiatedItems[index];
-                //InstantiatedItems.RemoveAt(index);
-
-                //GameObject.Destroy(toUpdate);
-
-                //AddElement(index, newValue);
             }
 
             public override void SetVisibility(Visibility visibility)
@@ -99,10 +99,11 @@ namespace UnityMVVM
             {
                 if (_src != null)
                 {
-                    _src.OnElementsAdded -= AddElements;
-                    _src.OnElementsRemoved -= RemoveElements;
+                    _src.OnElementAdded -= AddElement;
+                    _src.OnElementRemoved -= RemoveElement;
+                    _src.OnElementReplaced -= ReplaceElement;
+                    _src.OnElementMove -= MoveElement;
                     _src.OnCollectionReset -= ResetView;
-                    _src.OnElementUpdated -= UpdateElement;
                 }
             }
 
@@ -121,7 +122,7 @@ namespace UnityMVVM
             }
 
 
-            protected virtual void ResetView(int newStartingIndex, IList newItems)
+            protected virtual void ResetView()
             {
                 foreach (Transform t in transform)
                     GameObject.Destroy(t.gameObject);
@@ -144,40 +145,18 @@ namespace UnityMVVM
                 var go = CreateCollectionItem(newItem, transform);
                 go.transform.SetSiblingIndex(index);
 
+                InitItem(go, newItem, index);
+
                 InstantiatedItems.Insert(index, go);
             }
 
-            protected virtual void AddElements(int newStartingIndex, IList newItems)
+            protected virtual void RemoveElement(int index, object oldItem)
             {
-                int idx = 0;
-                var gameObjects = new List<GameObject>(newItems.Count);
-                foreach (var item in newItems)
-                {
-                    var go = CreateCollectionItem(item, transform);
-                    go.transform.SetSiblingIndex(newStartingIndex);
-
-                    gameObjects.Add(go);
-
-                    InitItem(go, item, idx);
-                    idx++;
-                }
-
-                InstantiatedItems.InsertRange(newStartingIndex, gameObjects);
+                if (index > InstantiatedItems.Count) throw new IndexOutOfRangeException();
+                Destroy(InstantiatedItems[index]);
+                InstantiatedItems[index] = null;
             }
 
-            protected virtual void RemoveElements(int oldStartingIndex, IList oldItems)
-            {
-                for (int i = oldStartingIndex; i < oldStartingIndex + oldItems.Count; i++)
-                {
-                    if (i < InstantiatedItems.Count)
-                    {
-                        GameObject.Destroy(InstantiatedItems[i]);
-                        InstantiatedItems[i] = null;
-                    }
-                }
-
-                InstantiatedItems.RemoveRange(oldStartingIndex, oldItems.Count);
-            }
             private void OnValidate()
             {
                 _src = GetComponent<CollectionViewSource>();

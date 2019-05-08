@@ -11,7 +11,6 @@ namespace UnityMVVM
         {
             public string message;
             public Color color;
-            
         }
     }
 }

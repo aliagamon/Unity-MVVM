@@ -3,19 +3,17 @@ using UniRx;
 
 namespace UnityMVVM.Reactive
 {
-    public class ReactiveCommand<T> : UniRx.ReactiveCommand<T>
+    public class ReactiveCommand<T> : UniRx.ReactiveCommand<T>, IBoxedSubscribe
     {
         public ReactiveCommand()
             : base()
         { }
-        
         public ReactiveCommand(IObservable<bool> canExecuteSource, bool initialValue = true)
             : base(canExecuteSource, initialValue)
         {
         }
 
-        
-        internal IDisposable NonGenericSubscribe(Action<object> onNext)
+        public IDisposable NonGenericSubscribe(Action<object> onNext)
         {
             return CanExecute.Subscribe(obj => onNext.Invoke(obj));
         }
@@ -46,7 +44,6 @@ namespace UnityMVVM.Reactive
         {
             ForceExecute(Unit.Default);
         }
-        
         internal IDisposable NonGenericSubscribe(Action<object> onNext)
         {
             return CanExecute.Subscribe(obj => onNext.Invoke(obj));
