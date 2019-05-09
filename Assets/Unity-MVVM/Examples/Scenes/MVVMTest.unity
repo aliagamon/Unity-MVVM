@@ -2556,11 +2556,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewModel: {fileID: 1669541576}
-  ViewModelName: UnityMVVM.Examples.OtherViewModel
+  ViewModelName: UnityMVVM.Examples.ReactiveViewModel
   SrcCollections:
-  - TestCollection
-  - Collection2
-  SrcCollectionName: TestCollection
+  - PropertyName: TestCollection
+    PropertyType: DataModel
+  SrcCollectionName:
+    PropertyName: TestCollection
+    PropertyType: DataModel
   SelectedItemPropName: 
 --- !u!114 &1755598735
 MonoBehaviour:
